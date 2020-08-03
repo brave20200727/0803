@@ -146,6 +146,13 @@ select productID, ProductName, UnitPrice
   order by UnitPrice DESC
   limit 3;
 
+/* 我的寫法
+SELECT ProductID, ProductName, UnitPrice
+FROM products
+ORDER BY UnitPrice DESC
+LIMIT 0, 3 // 每頁三個從第零個開始，也就是1-3名，如果改成LIMIT 3, 3也就是說4-6名
+*/
+
 /* 230 
   為什麼下列的指令傳回空集合?
  */ 
