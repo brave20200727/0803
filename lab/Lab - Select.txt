@@ -161,6 +161,73 @@ select *
   from products
   where ProductName Like binary 'c%'
 
+A: 因為加上binary之後會有分大小寫的差別
+
+/* 美商供應的產品清單
+-- 起
+SELECT *
+FROM products
+-- 承
+SELECT ProductID, ProductName, UnitPrice
+FROM products
+WHERE ???
+-- 轉
+SELECT *
+FROM suppliers
+WHERE Country = 'USA'
+-- 合
+SELECT ProductID, ProductName, UnitPrice
+FROM products
+WHERE supplierID IN (2, 3, 16, 19)
+=>
+SELECT ProductID, ProductName, UnitPrice
+FROM products
+WHERE supplierID IN (SELECT supplierID FROM suppliers WHERE Country = 'USA')
+*/
+
+/* 比對價差 ver1.0（與所有商品的平均相比）
+-- 起
+SELECT * FROM products
+-- 承
+SELECT ProductID, ProductName, UnitPrice, ?AvgPrice?
+FROM products
+-- 轉
+SELECT AVG(UnitPrice)
+FROM products
+-- 合
+SELECT ProductID, ProductName, UnitPrice, (UnitPrice - 28.87) as DiffPrice
+FROM products
+=>
+SELECT ProductID, ProductName, UnitPrice,
+(SELECT AVG(UnitPrice) FROM products) AS AvgPrice,
+(UnitPrice - (SELECT AVG(UnitPrice) FROM products)) as DiffPrice
+FROM products
+*/
+
+/* 比對價差 ver２.0（與同類商品的平均相比）
+-- 起
+SELECT * FROM products
+-- 承
+SELECT CategoryID, ProductID, ProductName, UnitPrice, ?AvgPrice?
+FROM products
+-- 轉
+SELECT AVG(UnitPrice)
+FROM products
+WHERE CategoryID = 1
+SELECT AVG(UnitPrice)
+FROM products
+WHERE CategoryID = 2
+.
+.
+.
+-- 合
+// p用來標示參考當時該筆紀錄的類別編號
+SELECT CategoryID, ProductID, ProductName, UnitPrice,
+(SELECT AVG(UnitPrice) FROM products WHERE CategoryID = p.CategoryID) AS AvgPrice,
+(UnitPrice - (SELECT AVG(UnitPrice) FROM products WHERE CategoryID = p.CategoryID )) as DiffPrice
+FROM products as p
+*/
+
 /* 310
   按照員工資料表(employees)的內容, 請查出一共有幾位員工?
  */
