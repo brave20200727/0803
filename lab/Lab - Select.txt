@@ -58,6 +58,7 @@ select SupplierID, ProductID, ProductName, UnitPrice, UnitsInStock, UnitsOnOrder
   from products
   where UnitsInStock < ReorderLevel
   order by SupplierID
+  // ASC 正序 DESC 倒序
 
 
 /* 160 
@@ -69,6 +70,11 @@ select *
   from products
   where ProductName Like 'c%'
 
+/* 如果想要區分大小寫的話要改成這樣
+SELECT *
+FROM products
+WHERE BINARY ProductName Like 'c%'
+*/
 
 /* 170 
   請寫一道 Query 列出:
