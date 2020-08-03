@@ -104,9 +104,16 @@ select *
 */
 
 SELECT companyname, fax
-  FROM suppliers
-  WHERE fax IS NULL;
+FROM suppliers
+WHERE fax IS NULL;
 
+SELECT companyname, fax
+FROM suppliers
+WHERE fax = NULL
+
+以上兩個結果為不同
+
+/* 如果資料庫名稱或是資料表名稱中間有空格時，能夠使用``去括起來 */
 
 /* 210 
   請寫一道 Query 列出:
