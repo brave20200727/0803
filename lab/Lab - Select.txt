@@ -250,7 +250,7 @@ SELECT AVG(UnitPrice) FROM products WHERE CategoryID = 4
 .
 .
 */
-/* 二次篩選 選出平均單價大於30
+/* 彙總後二次篩選 選出平均單價大於30
 SELECT CategoryID, AVG(UnitPrice) AS AVGPrice
 FROM products
 GROUP BY CategoryID
@@ -317,6 +317,30 @@ FROM `order details`
 GROUP BY OrderID, ProductID
 WITH ROLLUP
 
+
+/*
+預設JOIN為INNER JOIN
+INNER為兩個資料表都有的
+LEFT OUTER為左側資料表全列
+
+
+SELECT L.A, B, C FROM Table1 AS L JOIN Table2 AS R ON R.A = L.A
+
+Table1                    Table2
+A       B       ...       C         A        ...      可以想成這樣
+A1      B1*               C1        A1*               SELECT * FROM Table2 WHERE A = 'A1'
+A2      B2#               C2        A2#               SELECT * FROM Table2 WHERE A = 'A2'
+A3      B3                C3        A2#               SELECT * FROM Table2 WHERE A = 'A2'
+A4      B4@               C4        A4@               SELECT * FROM Table2 WHERE A = 'A4'
+
+
+A       B       C
+A1      B1      C1*
+A2      B2      C2#
+A2      B2      C3#
+A4      B4      C4@
+*/
+
 /* 410
   請寫一道 Query 列出 products 資料表的以下欄位
   ProductID, ProductName, SupplierID
@@ -329,12 +353,28 @@ select ProductID, ProductName, SupplierID from products
    同上, 但請一併列出該供應商名稱(CompanyName)、
    聯絡電話(Phone)、聯絡人(ContactName)好嗎?
    另外, 相同供應商的資料請列在一起
- */ 
+ */
+
 select ProductID, ProductName as PN, p.SupplierID, CompanyName, Phone, ContactName 
   from products p join suppliers s
   on p.SupplierID = s.SupplierID
   order by p.SupplierID
 
+我寫的
+SELECT p.ProductID, p.ProductName, s.CompanyName, s.Phone, s.ContactName
+FROM products AS p JOIN suppliers AS s
+ON p.SupplierID = s.SupplierID
+ORDER BY p.SupplierID
+
+/* UNION練習
+SELECT CustomerID, CompanyName
+FROM customers
+WHERE CompanyName LIKE 'A%'
+UNION
+SELECT CustomerID, CompanyName
+FROM customers
+WHERE CompanyName LIKE 'B%'
+*/
 
 /* 430
    我想列出「所有」供應商目前各自提供我們哪些產品資料的對照表,
@@ -355,7 +395,14 @@ select s.SupplierID, CompanyName, ProductID, ProductName
   on s.SupplierID = p.SupplierID
   order by s.SupplierID
 
+SELECT p.ProductID, p.ProductName, s.CompanyName, s.Phone, s.ContactName
+FROM products AS p RIGHT OUTER JOIN suppliers AS s
+ON p.SupplierID = s.SupplierID
+ORDER BY p.SupplierID
 
+/*
+SELECT 
+*/
 
 /* 510
   請列出「有買 23 號產品, 而且買超過 20 個」的訂單。
@@ -365,6 +412,10 @@ select orderid, customerid from orders
   (select orderid from `order details` 
     where productid = 23 and quantity > 20)
 
+SELECT o.OrderID, o.CustomerID
+FROM orders AS o JOIN `order details` AS od
+ON o.OrderID = od.OrderID
+WHERE od.ProductID = 23 AND od.Quantity > 20
 
 /* 520
   請列出目前資料庫最後一天有經手訂單處理的員工清單。
