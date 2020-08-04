@@ -395,23 +395,71 @@ select s.SupplierID, CompanyName, ProductID, ProductName
   on s.SupplierID = p.SupplierID
   order by s.SupplierID
 
+我寫的
 SELECT p.ProductID, p.ProductName, s.CompanyName, s.Phone, s.ContactName
 FROM products AS p RIGHT OUTER JOIN suppliers AS s
 ON p.SupplierID = s.SupplierID
 ORDER BY p.SupplierID
 
 /*
-SELECT 
+SELECT * FROM customers
+SELECT * FROM orders
+SELECT * FROM `order details`
+SELECT * FROM products
+
+SELECT c.CustomerID, c.CompanyName, o.OrderID, od.ProductID, p.ProductName
+FROM customers AS c 
+JOIN orders AS o ON c.CustomerID = o.CustomerID
+JOIN `order details` AS od ON o.OrderID = od.OrderID
+JOIN products AS p ON od.ProductID = p.ProductID
+ORDER BY c.CustomerID, o.OrderID, od.ProductID
+=>
+SELECT DISTINCT c.CustomerID, c.CompanyName, od.ProductID, p.ProductName
+FROM customers AS c 
+JOIN orders AS o ON c.CustomerID = o.CustomerID
+JOIN `order details` AS od ON o.OrderID = od.OrderID
+JOIN products AS p ON od.ProductID = p.ProductID
+ORDER BY c.CustomerID, od.ProductID
+=>
+SELECT DISTINCT c.CustomerID, c.CompanyName, p.ProductName
+FROM customers AS c 
+JOIN orders AS o ON c.CustomerID = o.CustomerID
+JOIN `order details` AS od ON o.OrderID = od.OrderID
+JOIN products AS p ON od.ProductID = p.ProductID
+ORDER BY c.CustomerID
+
+CREATE index idx_customerID ON customers(CustomerID);
+CREATE index idx_productID ON products(ProductID);
+CREATE index idx_orderID ON orders(OrderID);
+CREATE index idx_orderDetailsID on `order details`(OrderID);
+*/
+
+/*
+SELECT *
+FROM orders
+ORDER BY OrderDate DESC
+LIMIT 0, 10
+
+SELECT *
+FROM (SELECT * FROM orders ORDER BY OrderDate DESC LIMIT 0, 10) AS temp
+ORDER BY temp.OrderDate ASC
 */
 
 /* 510
   請列出「有買 23 號產品, 而且買超過 20 個」的訂單。
  */ 
+子查詢+IN
 select orderid, customerid from orders 
   where orderid in 
   (select orderid from `order details` 
     where productid = 23 and quantity > 20)
 
+單純子查詢
+SELECT OrderID, CustomerID
+FROM orders AS o1
+WHERE 20 < (SELECT Quantity FROM `order details` AS o WHERE o.OrderID = o1.OrderID AND o.ProductID = 23)
+
+JOIN
 SELECT o.OrderID, o.CustomerID
 FROM orders AS o JOIN `order details` AS od
 ON o.OrderID = od.OrderID
@@ -427,6 +475,12 @@ select EmployeeID, FirstName, LastName from Employees
       where OrderDate = (select Max(OrderDate) from Orders)
   )
 
+/* JOIN版本
+SELECT e.EmployeeID, e.FirstName, e.LastName
+FROM employees AS e JOIN orders AS o
+ON e.EmployeeID = o.EmployeeID
+WHERE o.OrderDate = (SELECT MAX(OrderDate) FROM orders)
+*/
 
 /* 530
   請列出各項產品的類別、編號、品名、單價、該類產品平均單價、
@@ -439,4 +493,11 @@ select CategoryID, ProductID, UnitPrice,
     where CategoryID = o.CategoryID) as DiffPrice
   from products as o
   order by CategoryID, ProductID
+
+我寫的
+SELECT CategoryID, ProductID, ProductName, UnitPrice,
+(SELECT AVG(UnitPrice) FROM products WHERE CategoryID = pOuter.CategoryID ) AS AVGPrice,
+(UnitPrice - (SELECT AVG(UnitPrice) FROM products WHERE CategoryID = pOuter.CategoryID)) AS DiffPrice
+FROM products AS pOuter
+ORDER BY CategoryID, ProductID
 
