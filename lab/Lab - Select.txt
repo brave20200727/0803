@@ -184,7 +184,6 @@ SELECT ProductID, ProductName, UnitPrice
 FROM products
 WHERE supplierID IN (SELECT supplierID FROM suppliers WHERE Country = 'USA')
 */
-
 /* 比對價差 ver1.0（與所有商品的平均相比）
 -- 起
 SELECT * FROM products
@@ -203,7 +202,6 @@ SELECT ProductID, ProductName, UnitPrice,
 (UnitPrice - (SELECT AVG(UnitPrice) FROM products)) as DiffPrice
 FROM products
 */
-
 /* 比對價差 ver２.0（與同類商品的平均相比）
 -- 起
 SELECT * FROM products
@@ -239,11 +237,37 @@ SELECT COUNT(*) FROM employees
  */
 SELECT COUNT(reportsto) FROM employees
 
+/*
+SELECT CategoryID, AVG(UnitPrice) AS AVGPrice FROM products GROUP BY CategoryID
+
+等同於這樣的效果
+=>
+SELECT AVG(UnitPrice) FROM products WHERE CategoryID = 1
+SELECT AVG(UnitPrice) FROM products WHERE CategoryID = 2
+SELECT AVG(UnitPrice) FROM products WHERE CategoryID = 3
+SELECT AVG(UnitPrice) FROM products WHERE CategoryID = 4
+.
+.
+.
+*/
+/* 二次篩選 選出平均單價大於30
+SELECT CategoryID, AVG(UnitPrice) AS AVGPrice
+FROM products
+GROUP BY CategoryID
+HAVING AVG(UnitPrice) >= 30
+*/
+/* 希望看到明細 又看到小計
+SELECT OrderID, ProductID, SUM(Quantity)
+FROM `order details`
+GROUP BY OrderID, ProductID
+WITH ROLLUP
+*/
+
 /* 330
   下列的指令, 請問錯了嗎?
  */
 
-select categoryID, productID, AVG(UnitPrice)
+select categoryID, productID, AVG(UnitPrice) // ProductID有點多餘
   from products
   group by categoryID
 
@@ -257,6 +281,11 @@ select categoryID, Sum(UnitsInStock * UnitPrice)
   from products
   group by categoryID;
 
+我寫的
+SELECT CategoryID, SUM(UnitPrice*UnitsInStock) AS stockCost
+FROM products
+GROUP BY CategoryID
+
 /* 350
   同上, 但庫存成本超過 12000 才要列出.
  */
@@ -265,6 +294,12 @@ select categoryID, Sum(UnitsInStock * UnitPrice)
   from products
   group by categoryID
   having Sum(UnitsInStock * UnitPrice) > 12000
+
+我寫的
+SELECT CategoryID, SUM(UnitPrice*UnitsInStock) AS stockCost
+FROM products
+GROUP BY CategoryID
+HAVING SUM(UnitPrice*UnitsInStock) > 12000
 
 /* 360
   請從 order details 統計各項產品銷售總和, 並且一併列出
@@ -275,6 +310,12 @@ SELECT productid, orderid, SUM(quantity) AS total_quantity
  FROM `order details`
  GROUP BY productid, orderid
  WITH ROLLUP
+
+我寫的
+SELECT OrderID, ProductID, SUM(Quantity)
+FROM `order details`
+GROUP BY OrderID, ProductID
+WITH ROLLUP
 
 /* 410
   請寫一道 Query 列出 products 資料表的以下欄位
