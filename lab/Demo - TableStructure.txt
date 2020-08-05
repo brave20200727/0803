@@ -18,6 +18,8 @@ create table friends
 alter table friends
   add email varchar(30) default 'someone@somewhere.com';
 
+default：如果新增資料時給有給定欄位值，以default為預設值
+
 -- 修改資料表結構 - 變更欄位定義
 alter table friends
   modify email varchar(40);
@@ -32,3 +34,79 @@ describe friends;
 -- -- 修改資料表結構 - 刪除欄位
 alter table friends
   drop column email;
+
+-- 刪除資料表
+DROP TABLE friends;
+
+----------------------------------------------
+DROP TABLE t1;
+CREATE TABLE t1 (
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  data int NULL,
+  test int NULL
+);
+INSERT INTO t1(data) VALUES (100);
+
+SET sql_mode = '';
+DROP TABLE t1;
+CREATE TABLE t1 (
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  data int NULL,
+  test int NOT NULL
+);
+INSERT INTO t1(data) VALUES (100);
+
+SET sql_mode = 'traditional';
+DROP TABLE t1;
+CREATE TABLE t1 (
+  id int AUTO_INCREMENT NOT NULL PRIMARY KEY,
+  data int NULL,
+  test int NOT NULL
+);
+INSERT INTO t1(data) VALUE (100);
+
+----------------------------------------------
+DROP TABLE t1;
+CREATE TABLE t1 (
+  id int NULL,
+  data int NULL,
+);
+
+INSERT INTO t1(id, data) VALUES (1, 100), (2, 100);
+INSERT INTO t1(id, data) VALUES (1, 100);
+
+SELECT * FROM t1;
+UPDATE t1 SET id = 3 WHERE id = 1 and data = 100;
+DELETE FROM t1 WHERE id = 1 and data = 100;
+
+----------------------------------------------
+DROP TABLE t1;
+CREATE TABLE t1 (
+  id int NULL,
+  data int NULL,
+);
+
+INSERT INTO t1(id, data) VALUES (1, 100), (2, 100);
+INSERT INTO t1(id, data) VALUES (1, 100);
+
+SELECT * FROM t1;
+
+ALTER TABLE t1 ADD tempId int AUTO_INCREMENT PRIMARY KEY;
+
+SELECT * FROM t1;
+
+UPDATE t1 SET id = 3 WHERE tempId = 3;
+
+----------------------------------------------
+DROP TABLE t1;
+CREATE TABLE t1 (
+  id int not NULL PRIMARY KEY,
+  data int NULL,
+);
+
+DROP TABLE t1;
+CREATE TABLE t1 (
+  id int not NULL,
+  data int NULL,
+  PRIMARY KEY (id)
+);
