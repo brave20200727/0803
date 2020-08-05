@@ -1,0 +1,37 @@
+UML
+itread01.com/content/1541223966.html
+http://tx.liberal.ntu.edu.tw/InfoMgt/Jx/IS_IM/UML.htm
+
+Process Model
+    - Envision
+    - Conceptual Design
+        research => analysis => optimization
+    - Logical Design
+        analysis => optimization
+    - Physical Design
+        rationalzation => implementation
+
+Source of Information
+    - Artifact
+    - Systems
+    - People
+
+Technique for Gathering Information
+    - Shadowing: Directly observe individuals doing their job to discover current practice and problem
+    - Interviews: Gather specific Information from individuals
+    - Focus group: Query a group to discover attitudes and shared perception
+    - Surveys: Collect detailed and statistically significant data
+    - User instruction: Ask end users to teach you how they work with a system
+    - Prototyping: Simulate a system that would be impractial to test directly
+    - Instrumented version: Use an instrument application to record how users perform tasks
+
+Categories of Information
+    - Business
+    - Application
+    - Operations
+    - Technology
+
+如何區分實體跟屬性
+    - 大小：比如說車子會有顏色 型號 廠牌，車子就是主體，顏色 型號 廠牌就是客體
+    - 主體性：我們會說客戶有客戶的地址，不會說地址有地址的客戶，客戶就是實體，地址就是屬性
+    - 互動性：例如客戶之間會互相互動，不會有地址跟血型互動，客戶就是實體，地址與血型就是屬性
