@@ -1,6 +1,9 @@
 ﻿create database workout;
 use workout;
 
+文字 varchar(n)
+數字 int
+
 -- 建立資料表
 create table friends
 (
