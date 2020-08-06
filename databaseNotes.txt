@@ -74,3 +74,19 @@ Employee(多) => EmployeeType(ㄧ)
 -Salary         +Salary         (簡易版本，因為實際要更複雜)
 4.
 Timesheet(多) => Client(一)
+
+----------------------------------------------
+
+SHOW VARIABLES LIKE 'data%';
+=>
++---------------+--------------------------------+
+| Variable_name | Value                          |
++---------------+--------------------------------+
+| datadir       | /Applications/MAMP/db/mysql57/ |
++---------------+--------------------------------+
+能夠查詢到mySQL database儲存資料的路徑
+
+SHOW DATABASES; => 顯示出所有的database
+
+SHOW VARIABLES LIKE 'char%'
+SET NAMES BIG5;
