@@ -90,3 +90,7 @@ SHOW DATABASES; => 顯示出所有的database
 
 SHOW VARIABLES LIKE 'char%'
 SET NAMES BIG5;
+
+如果直接更改資料表的內容是有關使用者權限的東西，
+想要立即生效的話就需要下這個指令
+FLUSH PRIVILEGES;

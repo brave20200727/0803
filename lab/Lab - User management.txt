@@ -31,7 +31,7 @@ select host, db, user, table_name, table_priv from tables_priv;
 
 -- 下列指令可否成功執行:
 grant usage on *.* to jeremy identified by 'Pa$$w0rd';
-grant usage on *.* to white;
+grant usage on *.* to white; => ERROR 1133 (42000): Can't find any matching row in the user table
 grant usage on *.* to Carl@'%' identified by 'Pa$$w0rd';
 
 
@@ -43,7 +43,7 @@ set password for carl = password('Pa$$w0rd');
 
 
 -- 以 carl 的身份嘗試下列指令, 順利嗎? :(
-select customerID, companyName from northwind.customers;
+select customerID, companyName from northwind.customers; => ERROR 1142 (42000): SELECT command denied to user 'carl'@'localhost' for table 'customers'
 
 
 -- 授予 carl 可以查詢 northwind 資料庫的所有資料表
@@ -59,7 +59,7 @@ select customerID, companyName from northwind.customers;
 
 -- 那... 以下的指令呢...
 use northwind;
-update customers set companyName = 'Lab Company' where customerID = 'ALFKI';
+update customers set companyName = 'Lab Company' where customerID = 'ALFKI'; => ERROR 1142 (42000): UPDATE command denied to user 'carl'@'localhost' for table 'customers'
 
 
 -- 授予 carl 可以 update northwind 資料庫的 customers 資料表
