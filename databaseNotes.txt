@@ -144,4 +144,4 @@ REPEATABLE READ;
 - Isolation（隔離性）：資料庫允許多個並發事務同時對其數據進行讀寫和修改的能力，隔離性可以防止多個事務並發執行時由於交叉執行而導致數據的不一致。事務隔離分為不同級別，包括未提交讀（Read uncommitted）、提交讀（read committed）、可重複讀（repeatable read）和串行化（Serializable）。[1]
 - Durability（持久性）：事務處理結束後，對數據的修改就是永久的，即便系統故障也不會丟失。
 
-mysqldump -uroot 資料庫名稱
+mysqldump -uroot --database 資料庫名稱 => 資料庫備份
