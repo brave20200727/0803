@@ -94,3 +94,47 @@ SET NAMES BIG5;
 如果直接更改資料表的內容是有關使用者權限的東西，
 想要立即生效的話就需要下這個指令
 FLUSH PRIVILEGES;
+
+----------------------------------------------
+prod
+
+        pid ....... qty
+        1           100
+甲                             乙
+100<----------------
+-20
+80----------------->80
+                      -------->80 (dirty read)
+-10
+70----------------->70#
+
+----------------------------------------------
+
+        pid ....... qty
+        1           100
+甲                             乙             丙              丁
+100<----------------
+                    80<--------
+80<-----------------
+                    60<----------------------
+60<-----------------
+                    50<--------------------------------------
+50<-----------------
+
+lock 類型
+    - read lock
+    - write lock
+
+LOCK TABLE products READ;
+UNLOCK TABLES;
+LOCK TABLE products WRITE;
+UNLOCK TABLES;
+-- LOCK TABLE products LOW PRIORITY READ;
+*如果同在queue中要lock的使用者們，優先程度write lock會優於read lock
+
+列出所有連線中的使用者
+SHOW PROCESSLIST;
+
+LOCK IN SHARE MODE; => read lock
+FOR UPDATE; => write lock
+REPEATABLE READ;

@@ -9,7 +9,10 @@ create table Lab
 );
 
 insert into Lab (data) values (1234.12);
+insert into Lab (data) values (1234.1);
 insert into Lab (data) values (1234.125);
+insert into Lab (data) values (1234.1256789);
+insert into Lab (data) values (12345678901234567890.125);
 -- 9999.99:
 insert into Lab (data) values (12345.12);
 

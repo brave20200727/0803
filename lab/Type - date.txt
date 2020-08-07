@@ -20,7 +20,7 @@ insert into Lab (data) values ('2006-02-29');
 insert into Lab (data) values ('2006-00-31');
 insert into Lab (data) values ('0000-00-00');
 insert into Lab (data) values ('2006-01-32');
-
+INSERT INTO Lab (data) VALUES ('2006-02-31');
 
 select * from Lab;
 

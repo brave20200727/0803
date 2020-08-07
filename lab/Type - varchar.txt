@@ -14,4 +14,3 @@ insert into Lab (data) values (' 12 ');
 
 select id, concat('*', data, '*') as dataField
   from Lab;
-
