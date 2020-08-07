@@ -9,6 +9,12 @@ select categoryId, categoryName
   lines terminated by '\r\n'
   from categories;
 
+select categoryId, categoryName 
+into outfile 'c:\\temp\\lab.txt' 
+field terminated by ',' optionally enclosed by '"'
+lines terminated by '\r\n'
+from categories;
+
 -- 準備稍後練習匯入時會用到資料庫與資料表
 create database LabIO;
 use LabIO;
